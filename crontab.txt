@@ -1,0 +1,1 @@
+*/5 17-23 * * * /usr/local/bin/node /opt/app/index.js >> /var/log/iosupdate.log
