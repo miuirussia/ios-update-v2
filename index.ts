@@ -1,13 +1,16 @@
+import { resolve } from 'path';
 import Database from 'better-sqlite3';
 import { Telegram } from 'telegraf';
 import Parser from 'rss-parser';
 
-const ALLOW_LIST = ['iOS', 'iPadOS', 'watchOS', 'tvOS', 'macOS'];
-const WAIT_TIMEOUT_MS: number = 5 * 1000;
 const BOT_API_KEY = process.env['BOT_API_KEY'];
 const BOT_CHANNEL_ID = process.env['BOT_CHANNEL_ID'];
+const BOT_STATE = process.env['BOT_STATE'];
 
-class EnvironmentError extends Error {};
+const ALLOW_LIST = ['iOS', 'iPadOS', 'watchOS', 'tvOS', 'macOS'];
+const WAIT_TIMEOUT_MS: number = 5 * 1000;
+
+class EnvironmentError extends Error { };
 
 if (!BOT_API_KEY) {
   throw new EnvironmentError('BOT_API_KEY is not defined');
@@ -17,8 +20,12 @@ if (!BOT_CHANNEL_ID) {
   throw new EnvironmentError('BOT_CHANNEL_ID is not defined');
 }
 
+if (!BOT_STATE) {
+  throw new EnvironmentError('BOT_STATE is not defined');
+}
+
 const parser = new Parser();
-const db = new Database('./data/state.db');
+const db = new Database(resolve(BOT_STATE));
 const bot = new Telegram(BOT_API_KEY);
 
 db.prepare(
